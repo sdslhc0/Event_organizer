@@ -147,15 +147,23 @@ class BookingController extends Controller
                 \Log::error('Gagal mengirim email notifikasi: ' . $e->getMessage());
             }
 
-            return redirect()->route('home')
+            $redirect = redirect()->route('home')
                 ->with('success', 'Pesanan berhasil dikirim! Tim kami akan menghubungi Anda dalam 24 jam.')
                 ->with('order_success', true);
+
+            if ($booking->id_paket_bundling && $booking->paketBundling) {
+                $redirect->with('new_order_booking_id', $booking->id)
+                         ->with('new_order_paket_id', $booking->id_paket_bundling)
+                         ->with('new_order_paket_nama', $booking->paketBundling->nama);
+            }
+
+            return $redirect;
         });
     }
 
     public function riwayat()
     {
-        $bookings = Booking::with(['detailBooking', 'layanans.acara', 'paketBundling'])
+        $bookings = Booking::with(['detailBooking', 'layanans.acara', 'paketBundling', 'kuisioner'])
             ->where('id_users', Auth::id())
             ->latest()
             ->get();

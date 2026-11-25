@@ -66,6 +66,11 @@ class Booking extends Model
         return $this->belongsTo(PaketBundling::class, 'id_paket_bundling');
     }
 
+    public function kuisioner()
+    {
+        return $this->hasOne(KuisionerPenilaian::class, 'id_booking');
+    }
+
     public function getFormattedSubtotalAttribute(): string
     {
         return 'Rp ' . number_format($this->subtotal, 0, ',', '.');

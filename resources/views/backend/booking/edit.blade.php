@@ -39,11 +39,17 @@
                     <!-- Jenis Acara -->
                     <div>
                         <label for="jenis_acara" class="block text-sm font-medium text-brown-300 mb-2">Jenis Acara</label>
+                        @php
+                            $currentJenis = old('jenis_acara', $booking->jenis_acara);
+                            $jenisOptions = ['Wedding', 'Lamaran', 'Birthday', 'Gathering', 'Corporate', 'Lainnya'];
+                        @endphp
                         <select name="jenis_acara" id="jenis_acara" class="w-full bg-dark-200 border border-brown-700/60 text-brown-100 rounded-xl focus:ring-gold-500 focus:border-gold-500 py-3 px-4" required>
-                            <option value="Wedding" {{ old('jenis_acara', $booking->jenis_acara) == 'Wedding' ? 'selected' : '' }}>Wedding</option>
-                            <option value="Engagement" {{ old('jenis_acara', $booking->jenis_acara) == 'Engagement' ? 'selected' : '' }}>Engagement</option>
-                            <option value="Prewedding" {{ old('jenis_acara', $booking->jenis_acara) == 'Prewedding' ? 'selected' : '' }}>Prewedding</option>
-                            <option value="Lainnya" {{ old('jenis_acara', $booking->jenis_acara) == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                            @foreach($jenisOptions as $opt)
+                                <option value="{{ $opt }}" {{ $currentJenis == $opt ? 'selected' : '' }}>{{ $opt }}</option>
+                            @endforeach
+                            @if($currentJenis && !in_array($currentJenis, $jenisOptions))
+                                <option value="{{ $currentJenis }}" selected>{{ $currentJenis }}</option>
+                            @endif
                         </select>
                         @error('jenis_acara')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>

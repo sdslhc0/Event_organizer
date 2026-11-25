@@ -5,6 +5,7 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\KuisionerController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\KategoriController;
 use App\Http\Controllers\Backend\AcaraController;
@@ -41,6 +42,9 @@ Route::middleware('auth')->group(function () {
 
     // Review
     Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
+
+    // Kuisioner SPK
+    Route::post('/kuisioner', [KuisionerController::class, 'store'])->name('kuisioner.store');
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

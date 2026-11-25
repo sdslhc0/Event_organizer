@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\PaketBundling;
 use App\Models\PaketPenilaian;
+use App\Models\KuisionerPenilaian;
+use App\Services\SpkService;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -15,18 +17,17 @@ class SpkController extends Controller
     // ==========================================
     public function penilaianIndex(Request $request)
     {
-        // For the left form
         $pakets = PaketBundling::all();
-        $editPenilaian = null;
 
-        if ($request->has('edit')) {
-            $editPenilaian = PaketPenilaian::where('paket_id', $request->edit)->first();
-        }
+        // Data penilaian paket terurut berdasar ranking
+        $penilaians = PaketPenilaian::with('paketBundling')->orderBy('ranking', 'asc')->get();
+        $topPaket = $penilaians->where('ranking', 1)->first() ?? $penilaians->first();
 
-        // For the right table
-        $penilaians = PaketPenilaian::with('paketBundling')->get();
+        // Data kuisioner dari pengguna (Maksimal 10 per halaman)
+        $totalKuisioner = KuisionerPenilaian::count();
+        $kuisioners = KuisionerPenilaian::with(['user', 'booking', 'paketBundling'])->latest()->paginate(10);
 
-        return view('backend.spk.penilaian', compact('pakets', 'penilaians', 'editPenilaian'));
+        return view('backend.spk.penilaian', compact('pakets', 'penilaians', 'totalKuisioner', 'kuisioners', 'topPaket'));
     }
 
     public function penilaianStore(Request $request)
@@ -91,29 +92,22 @@ class SpkController extends Controller
             ->orderBy('skor_akhir', 'desc')
             ->get();
 
-        $recommendedPakets = $penilaians->whereNotNull('ranking')->take(5);
+        $recommendedPakets = $penilaians->whereNotNull('ranking')->take(5)->values();
 
-        $scoreDistribution = [
-            'Sangat Tinggi (>0.8)' => PaketPenilaian::where('skor_akhir', '>', 0.8)->count(),
-            'Tinggi (0.6 - 0.8)' => PaketPenilaian::whereBetween('skor_akhir', [0.6, 0.8])->count(),
-            'Sedang (0.4 - 0.6)' => PaketPenilaian::whereBetween('skor_akhir', [0.4, 0.6])->count(),
-            'Rendah (<0.4)' => PaketPenilaian::where('skor_akhir', '<', 0.4)->count(),
-        ];
+        $scoreDistribution = [];
+        foreach ($penilaians->whereNotNull('ranking') as $p) {
+            $name = $p->paketBundling->nama ?? 'Paket #' . $p->paket_id;
+            $scoreDistribution[$name] = round(($p->skor_akhir ?? 0) * 100, 1);
+        }
 
         return view('backend.spk.perhitungan', compact('penilaians', 'recommendedPakets', 'scoreDistribution'));
     }
 
     public function perhitunganCalculate()
     {
-        $penilaians = PaketPenilaian::all();
+        SpkService::recalculateFromKuisioner();
 
-        if ($penilaians->isEmpty()) {
-            return redirect()->route('backend.spk.perhitungan')->with('error', 'Belum ada data nilai kriteria untuk dihitung.');
-        }
-
-        $this->hitungSpk();
-
-        return redirect()->route('backend.spk.perhitungan')->with('success', 'Perhitungan SPK berhasil dijalankan dan ranking telah diupdate.');
+        return redirect()->route('backend.spk.perhitungan')->with('success', 'Perhitungan SPK dan sinkronisasi kuisioner berhasil dijalankan. Ranking telah diupdate.');
     }
 
     public function exportPdf()

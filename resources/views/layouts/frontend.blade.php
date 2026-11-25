@@ -12,6 +12,11 @@
 
     <title>{{ $title ?? 'MELODI - Wedding & Event Organizer' }}</title>
 
+    {{-- Favicon --}}
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v=2">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('favicon.png') }}?v=2">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=2">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -203,19 +208,57 @@
     @if(session('success'))
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    html: `<p class="text-[#a89880] text-[13px] font-sans leading-relaxed tracking-wide mt-2">{{ session('success') }}</p>`,
-                    background: '#1a140e',
-                    color: '#f0e8d8',
-                    showConfirmButton: false,
-                    timer: 3500,
-                    customClass: {
-                        popup: 'border-2 border-[#c9a84c]/30 rounded-2xl shadow-[0_0_50px_rgba(201,168,76,0.1)] bg-gradient-to-b from-[#1f1812] to-[#120d0a]',
-                        title: 'font-serif text-[#c9a84c] text-3xl tracking-widest uppercase mt-4 block',
-                    }
-                });
+                @if(session('new_order_booking_id'))
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pesanan Berhasil',
+                        html: `
+                            <p class="text-[#c7baa7] text-sm leading-relaxed mb-4">{{ session('success') }}</p>
+                            <div class="p-4 rounded-xl bg-[#251c14] border border-[#c9a84c]/40 text-left my-2 shadow-inner">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10px] uppercase tracking-widest text-[#c9a84c] font-bold">Paket Terpilih</span>
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-[#c9a84c]/20 text-[#c9a84c]">Bundling</span>
+                                </div>
+                                <div class="text-[#f5ebe4] font-serif text-lg font-bold">{{ session('new_order_paket_nama') }}</div>
+                                <p class="text-[#a89880] text-xs mt-2 leading-relaxed">
+                                    Bantu calon pelanggan lain dengan memberikan penilaian objektif terhadap paket ini sekarang!
+                                </p>
+                            </div>
+                        `,
+                        background: '#1a140e',
+                        color: '#f0e8d8',
+                        showCancelButton: true,
+                        confirmButtonText: '⭐ BERI PENILAIAN SEKARANG',
+                        cancelButtonText: 'NANTI SAJA',
+                        confirmButtonColor: '#c9a84c',
+                        cancelButtonColor: '#2d2218',
+                        reverseButtons: true,
+                        customClass: {
+                            popup: 'border-2 border-[#c9a84c]/40 rounded-2xl shadow-[0_0_50px_rgba(201,168,76,0.15)] bg-gradient-to-b from-[#1f1812] to-[#120d0a] p-6 max-w-md',
+                            title: 'font-serif text-[#c9a84c] text-2xl tracking-widest uppercase mt-2 block font-bold',
+                            confirmButton: 'font-bold tracking-wider text-[#1a140e] px-6 py-3 rounded-xl text-xs uppercase shadow-lg shadow-[#c9a84c]/20',
+                            cancelButton: 'font-semibold tracking-wider text-[#a89880] hover:text-[#f0e8d8] px-5 py-3 rounded-xl text-xs uppercase border border-[#4d3e30]'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "{{ route('booking.riwayat') }}?rate={{ session('new_order_booking_id') }}";
+                        }
+                    });
+                @else
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        html: `<p class="text-[#a89880] text-[13px] font-sans leading-relaxed tracking-wide mt-2">{{ session('success') }}</p>`,
+                        background: '#1a140e',
+                        color: '#f0e8d8',
+                        showConfirmButton: false,
+                        timer: 3500,
+                        customClass: {
+                            popup: 'border-2 border-[#c9a84c]/30 rounded-2xl shadow-[0_0_50px_rgba(201,168,76,0.1)] bg-gradient-to-b from-[#1f1812] to-[#120d0a]',
+                            title: 'font-serif text-[#c9a84c] text-3xl tracking-widest uppercase mt-4 block',
+                        }
+                    });
+                @endif
             });
         </script>
     @endif

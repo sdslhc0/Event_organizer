@@ -1,59 +1,131 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# MELODI — Wedding & Event Organizer
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web manajemen layanan *Wedding & Event Organizer* berbasis **Laravel 12**, **Tailwind CSS**, **Alpine.js**, dan **Chart.js** yang dilengkapi sistem pemesanan multi-tahap, paket bundling, kuisioner pelanggan, serta Sistem Pendukung Keputusan (SPK) menggunakan metode **Analytical Hierarchy Process (AHP)** untuk merekomendasikan paket bundling terbaik.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Prasyarat Sistem
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Pastikan perangkat lokal Anda sudah terpasang:
+- **PHP** `>= 8.2` (beserta ekstensi `pdo_mysql`, `mbstring`, `openssl`, `fileinfo`, dan `gd`)
+- **Composer**
+- **Node.js** & **NPM**
+- **MySQL / MariaDB** (bisa menggunakan Laragon, XAMPP, atau Docker)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Cara Instalasi di Lokal
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Ikuti langkah-langkah berikut secara berurutan:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 1. Clone / Masuk ke Folder Proyek
+```bash
+git clone <url-repository-anda>
+cd event_organizer
+```
 
-## Laravel Sponsors
+### 2. Install Dependency Backend & Frontend
+```bash
+composer install
+npm install
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 3. Konfigurasi File `.env`
+Salin file `.env.example` menjadi `.env`:
+```bash
+# Windows (PowerShell / CMD)
+copy .env.example .env
 
-### Premium Partners
+# macOS / Linux
+cp .env.example .env
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Buka file `.env` dan sesuaikan konfigurasi database MySQL Anda:
+```env
+APP_NAME=MELODI
+APP_URL=http://127.0.0.1:8000
 
-## Contributing
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=wedding_organizer
+DB_USERNAME=root
+DB_PASSWORD=
+```
+> **Catatan:** Pastikan Anda sudah membuat database kosong di MySQL/phpMyAdmin sesuai nilai `DB_DATABASE` di atas (misalnya `wedding_organizer`).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 4. Generate Key & Jalankan Migrasi Database
+```bash
+php artisan key:generate
+php artisan migrate
+```
+Jika ingin langsung mengisi data awal (*user admin, user demo, kategori, dan layanan acara*):
+```bash
+php artisan db:seed
+```
+*(Atau jalankan sekaligus dengan `php artisan migrate --seed`)*
 
-## Code of Conduct
+### 5. Hubungkan Storage Publik (`storage:link`)
+Agar gambar yang diunggah (layanan acara, paket bundling, bukti pembayaran, dll.) dapat diakses oleh browser:
+```bash
+php artisan storage:link
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 6. Build Asset Frontend
+Untuk mem-build CSS & JS produksi:
+```bash
+npm run build
+```
+*(Atau gunakan `npm run dev` di terminal terpisah jika sedang melakukan pengembangan tampilan)*
 
-## Security Vulnerabilities
+### 7. Jalankan Aplikasi
+```bash
+php artisan serve
+```
+Buka browser dan akses: **http://127.0.0.1:8000**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+*(Jika menggunakan **Laragon**, pastikan document root mengarah ke folder `public/` atau jalankan lewat `php artisan serve`)*
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Akun Bawaan (Jika Menjalankan Seeder)
+
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Admin** | `admin@melodi.com` | `password` |
+| **User / Pelanggan** | `user@melodi.com` | `password` |
+
+---
+
+## Troubleshooting: Gambar Tidak Muncul
+
+Jika foto layanan, paket bundling, atau gambar hasil upload lainnya tidak muncul (broken image), biasanya disebabkan oleh **folder atau shortcut `public/storage` yang sudah ada sebelumnya** masih mengarah ke path komputer lama / rusak.
+
+**Solusi:**
+1. **Hapus terlebih dahulu folder `storage` yang ada di dalam folder `public/`** (`public/storage`):
+   - **Cara Manual:** Buka File Explorer/Finder -> masuk ke folder `public` -> hapus folder `storage`.
+   - **Via Terminal:**
+     ```bash
+     # Windows (CMD)
+     rmdir public\storage
+
+     # Windows (PowerShell)
+     Remove-Item public\storage -Recurse -Force
+
+     # macOS / Linux
+     rm -rf public/storage
+     ```
+2. **Buat ulang symlink storage Laravel:**
+   ```bash
+   php artisan storage:link
+   ```
+3. **Refresh browser** dengan *hard refresh* (`Ctrl + Shift + R`).
+
+---
+
+## Perintah Tambahan yang Berguna
+
+Jika terjadi perubahan pada view/konfigurasi namun tampilan belum berubah, bersihkan cache Laravel dengan perintah:
+```bash
+php artisan optimize:clear
+```

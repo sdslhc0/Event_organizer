@@ -36,6 +36,11 @@ class PaketBundling extends Model
         return $this->hasOne(PaketPenilaian::class, 'paket_id');
     }
 
+    public function kuisioners()
+    {
+        return $this->hasMany(KuisionerPenilaian::class, 'paket_id');
+    }
+
     public function getFormattedHargaAttribute(): string
     {
         return 'Rp ' . number_format($this->harga, 0, ',', '.');
