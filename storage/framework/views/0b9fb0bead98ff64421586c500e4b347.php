@@ -91,11 +91,11 @@
 
             
             <div x-data="{ showAllBundling: false }">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 <?php echo e($paketBundlings->count() >= 4 ? 'lg:grid-cols-4 gap-6' : 'lg:grid-cols-3 gap-8'); ?>">
                     <?php $__empty_1 = true; $__currentLoopData = $paketBundlings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $bundling): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                    <div class="group relative bg-[#231d18] border border-[#4a4239]/60 overflow-hidden transition-all duration-500 hover:border-[#c9a84c]/50 hover:shadow-[0_8px_40_rgba(201,168,76,0.08)]"
-                         x-show="showAllBundling || <?php echo e($index); ?> < 3"
-                         style="animation: fadeInUp 0.8s ease-out <?php echo e(($index * 0.15)); ?>s both; <?php echo e($index >= 3 ? 'display: none;' : ''); ?>">
+                    <div class="group relative bg-[#231d18] border border-[#4a4239]/60 overflow-hidden transition-all duration-500 hover:border-[#c9a84c]/50 hover:shadow-[0_8px_40_rgba(201,168,76,0.08)] flex flex-col"
+                         x-show="showAllBundling || <?php echo e($index); ?> < 4"
+                         style="animation: fadeInUp 0.8s ease-out <?php echo e(($index * 0.15)); ?>s both; <?php echo e($index >= 4 ? 'display: none;' : ''); ?>">
 
                     
                     <div class="relative h-56 overflow-hidden">
@@ -123,7 +123,7 @@
                     </div>
 
                     
-                    <div class="p-6">
+                    <div class="p-6 flex-1 flex flex-col">
                         <h3 class="font-serif text-xl text-[#f5f0e8] mb-2 group-hover:text-[#c9a84c] transition-colors duration-300"><?php echo e($bundling->nama); ?></h3>
                         
                         <?php if($bundling->acaras->count() > 0): ?>
@@ -147,7 +147,7 @@
                         <?php endif; ?>
 
                         
-                        <div class="mt-5 pt-5 border-t border-[#4a4239]/40 flex items-center justify-between">
+                        <div class="mt-auto pt-5 border-t border-[#4a4239]/40 flex items-center justify-between">
                             <div class="flex items-center gap-2 text-[#6b5e4f]">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
@@ -180,7 +180,7 @@
                 <?php endif; ?>
                 </div>
 
-                <?php if($paketBundlings->count() > 3): ?>
+                <?php if($paketBundlings->count() > 4): ?>
                     <div class="mt-12 flex flex-col items-center gap-4">
                         <button x-show="!showAllBundling" @click="showAllBundling = true" 
                                 class="px-8 py-3 border border-[#c9a84c] text-[#c9a84c] text-xs uppercase tracking-[0.2em] rounded-sm hover:bg-[#c9a84c] hover:text-[#1a140e] transition-all duration-300 font-medium w-full max-w-xs block">

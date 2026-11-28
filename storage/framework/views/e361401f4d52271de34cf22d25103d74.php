@@ -39,7 +39,7 @@
                     <p class="text-brown-400">Silakan sesuaikan filter atau hubungi admin kami.</p>
                 </div>
             <?php else: ?>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 <?php echo e($pakets->count() >= 4 ? 'lg:grid-cols-4 gap-6' : 'lg:grid-cols-3 gap-8'); ?>">
                     <?php $__currentLoopData = $pakets; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $paket): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="group bg-dark-100 rounded-2xl border border-brown-800/30 overflow-hidden hover:border-gold-500/30 transition-all duration-500 flex flex-col relative">
 
