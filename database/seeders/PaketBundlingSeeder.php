@@ -58,6 +58,26 @@ class PaketBundlingSeeder extends Seeder
                     'Paket Catering Premium',
                 ],
             ],
+            [
+                'nama' => 'Diamond Package',
+                'harga' => 250000000,
+                'deskripsi' => '"Catering 2000 pax dan Undangan 1500 cetak"',
+                'gambar' => 'paket-bundling/u02dfKV5EfoBQAEGzu7GStE0zyloNqVMOvFPLOaQ.jpg',
+                'items' => [
+                    'Grandeur Signature Decor',
+                    'Paket Catering Premium',
+                    'Premium Package',
+                    'Adat Jawa',
+                    'Adat Minang',
+                    'Adat Batak',
+                    'Adat Sunda',
+                    'Grandeur Beauty & Attire',
+                    'Live Band',
+                    'Music Tradisonal Dan Adat',
+                    'Undangan Digital Interaktif',
+                    'Undangan Cetak Eksklusif',
+                ],
+            ],
         ];
 
         $acaraByName = Acara::pluck('id', 'nama');

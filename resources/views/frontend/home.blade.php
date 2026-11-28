@@ -82,11 +82,11 @@
 
             {{-- Bundling Cards Grid --}}
             <div x-data="{ showAllBundling: false }">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 {{ $paketBundlings->count() >= 4 ? 'lg:grid-cols-4 gap-6' : 'lg:grid-cols-3 gap-8' }}">
                     @forelse($paketBundlings as $index => $bundling)
-                    <div class="group relative bg-[#231d18] border border-[#4a4239]/60 overflow-hidden transition-all duration-500 hover:border-[#c9a84c]/50 hover:shadow-[0_8px_40_rgba(201,168,76,0.08)]"
-                         x-show="showAllBundling || {{ $index }} < 3"
-                         style="animation: fadeInUp 0.8s ease-out {{ ($index * 0.15) }}s both; {{ $index >= 3 ? 'display: none;' : '' }}">
+                    <div class="group relative bg-[#231d18] border border-[#4a4239]/60 overflow-hidden transition-all duration-500 hover:border-[#c9a84c]/50 hover:shadow-[0_8px_40_rgba(201,168,76,0.08)] flex flex-col"
+                         x-show="showAllBundling || {{ $index }} < 4"
+                         style="animation: fadeInUp 0.8s ease-out {{ ($index * 0.15) }}s both; {{ $index >= 4 ? 'display: none;' : '' }}">
 
                     {{-- Image --}}
                     <div class="relative h-56 overflow-hidden">
@@ -114,7 +114,7 @@
                     </div>
 
                     {{-- Content --}}
-                    <div class="p-6">
+                    <div class="p-6 flex-1 flex flex-col">
                         <h3 class="font-serif text-xl text-[#f5f0e8] mb-2 group-hover:text-[#c9a84c] transition-colors duration-300">{{ $bundling->nama }}</h3>
                         
                         @if($bundling->acaras->count() > 0)
@@ -137,7 +137,7 @@
                         @endif
 
                         {{-- Bottom detail --}}
-                        <div class="mt-5 pt-5 border-t border-[#4a4239]/40 flex items-center justify-between">
+                        <div class="mt-auto pt-5 border-t border-[#4a4239]/40 flex items-center justify-between">
                             <div class="flex items-center gap-2 text-[#6b5e4f]">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
@@ -170,7 +170,7 @@
                 @endforelse
                 </div>
 
-                @if($paketBundlings->count() > 3)
+                @if($paketBundlings->count() > 4)
                     <div class="mt-12 flex flex-col items-center gap-4">
                         <button x-show="!showAllBundling" @click="showAllBundling = true" 
                                 class="px-8 py-3 border border-[#c9a84c] text-[#c9a84c] text-xs uppercase tracking-[0.2em] rounded-sm hover:bg-[#c9a84c] hover:text-[#1a140e] transition-all duration-300 font-medium w-full max-w-xs block">

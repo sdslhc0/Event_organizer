@@ -77,7 +77,14 @@ Route::middleware(['auth', 'admin'])->prefix('backend')->name('backend.')->group
     // Bundling Packages CRUD
     Route::resource('bundling', PaketBundlingController::class)->except(['show']);
 
-    // SPK Paket Bundling - Penilaian
+    // SPK Paket Bundling - Bobot & Responden AHP (4 Tab Excel)
+    Route::get('/spk/bobot-ahp', [\App\Http\Controllers\Backend\SpkController::class, 'bobotIndex'])->name('spk.bobot');
+    Route::get('/spk/template-ahp', [\App\Http\Controllers\Backend\SpkController::class, 'downloadAhpTemplate'])->name('spk.template');
+    Route::get('/spk/export-ahp', [\App\Http\Controllers\Backend\SpkController::class, 'exportActiveAhp'])->name('spk.export_ahp');
+    Route::post('/spk/preview-ahp', [\App\Http\Controllers\Backend\SpkController::class, 'previewAhpRespondents'])->name('spk.preview_ahp');
+    Route::post('/spk/import-ahp', [\App\Http\Controllers\Backend\SpkController::class, 'importAhpRespondents'])->name('spk.import_ahp');
+
+    // SPK Paket Bundling - Penilaian Pelanggan & Kuisioner
     Route::get('/spk/penilaian', [\App\Http\Controllers\Backend\SpkController::class, 'penilaianIndex'])->name('spk.penilaian');
     Route::post('/spk/penilaian', [\App\Http\Controllers\Backend\SpkController::class, 'penilaianStore'])->name('spk.penilaian.store');
     Route::delete('/spk/penilaian/{id}', [\App\Http\Controllers\Backend\SpkController::class, 'penilaianDestroy'])->name('spk.penilaian.destroy');

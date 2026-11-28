@@ -12,8 +12,8 @@
         paketId: {{ $autoOpenModal ? $targetRateBooking->paketBundling->id : 'null' }}, 
         paketNama: '{{ $autoOpenModal ? addslashes($targetRateBooking->paketBundling->nama) : '' }}',
         fasilitas: 'sangat_lengkap',
-        harga: 'terjangkau',
-        kualitas: 'sangat_bagus',
+        harga: 'murah',
+        kualitas: 'sangat_baik',
         komentar: ''
     }">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -139,7 +139,7 @@
                                                             </span>
                                                         @else
                                                             <button type="button" 
-                                                                @click="showModal = true; bookingId = {{ $booking->id }}; paketId = {{ $booking->paketBundling->id }}; paketNama = '{{ addslashes($booking->paketBundling->nama) }}'"
+                                                                @click="showModal = true; bookingId = {{ $booking->id }}; paketId = {{ $booking->paketBundling->id }}; paketNama = '{{ addslashes($booking->paketBundling->nama) }}'; fasilitas = 'sangat_lengkap'; harga = 'murah'; kualitas = 'sangat_baik'; komentar = ''"
                                                                 class="btn-gold text-xs py-1.5 px-4 flex items-center gap-1.5 shadow-md hover:shadow-gold-500/20">
                                                                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                                                                 Beri Penilaian Paket
@@ -255,26 +255,26 @@
                                         <span class="text-[10px] text-brown-400 opacity-80 mt-0.5">Fasilitas prima</span>
                                     </button>
 
+                                    {{-- Lengkap --}}
+                                    <button type="button" 
+                                        @click="fasilitas = 'lengkap'"
+                                        :class="fasilitas === 'lengkap' ? 'bg-gold-500/20 border-gold-500 text-gold-300 shadow-[0_0_15px_rgba(212,168,67,0.2)] ring-1 ring-gold-500/50' : 'bg-[#1b130c] border-brown-800/80 text-brown-400 hover:border-gold-500/40 hover:text-brown-200'"
+                                        class="relative flex flex-col items-center justify-center p-3 text-center rounded-xl border transition-all duration-200 cursor-pointer">
+                                        <span x-show="fasilitas === 'lengkap'" class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-gold-500 text-black flex items-center justify-center text-[10px] font-bold shadow-md">✓</span>
+                                        <span class="text-base mb-1">✨</span>
+                                        <span class="text-xs font-semibold block">Lengkap</span>
+                                        <span class="text-[10px] text-brown-400 opacity-80 mt-0.5">Semua terpenuhi</span>
+                                    </button>
+
                                     {{-- Cukup Lengkap --}}
                                     <button type="button" 
                                         @click="fasilitas = 'cukup_lengkap'"
                                         :class="fasilitas === 'cukup_lengkap' ? 'bg-gold-500/20 border-gold-500 text-gold-300 shadow-[0_0_15px_rgba(212,168,67,0.2)] ring-1 ring-gold-500/50' : 'bg-[#1b130c] border-brown-800/80 text-brown-400 hover:border-gold-500/40 hover:text-brown-200'"
                                         class="relative flex flex-col items-center justify-center p-3 text-center rounded-xl border transition-all duration-200 cursor-pointer">
                                         <span x-show="fasilitas === 'cukup_lengkap'" class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-gold-500 text-black flex items-center justify-center text-[10px] font-bold shadow-md">✓</span>
-                                        <span class="text-base mb-1">✨</span>
-                                        <span class="text-xs font-semibold block">Cukup Lengkap</span>
-                                        <span class="text-[10px] text-brown-400 opacity-80 mt-0.5">Standar terpenuhi</span>
-                                    </button>
-
-                                    {{-- Kurang Lengkap --}}
-                                    <button type="button" 
-                                        @click="fasilitas = 'kurang_lengkap'"
-                                        :class="fasilitas === 'kurang_lengkap' ? 'bg-gold-500/20 border-gold-500 text-gold-300 shadow-[0_0_15px_rgba(212,168,67,0.2)] ring-1 ring-gold-500/50' : 'bg-[#1b130c] border-brown-800/80 text-brown-400 hover:border-gold-500/40 hover:text-brown-200'"
-                                        class="relative flex flex-col items-center justify-center p-3 text-center rounded-xl border transition-all duration-200 cursor-pointer">
-                                        <span x-show="fasilitas === 'kurang_lengkap'" class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-gold-500 text-black flex items-center justify-center text-[10px] font-bold shadow-md">✓</span>
                                         <span class="text-base mb-1">⚪</span>
-                                        <span class="text-xs font-semibold block">Kurang Lengkap</span>
-                                        <span class="text-[10px] text-brown-400 opacity-80 mt-0.5">Ada kekurangan</span>
+                                        <span class="text-xs font-semibold block">Cukup Lengkap</span>
+                                        <span class="text-[10px] text-brown-400 opacity-80 mt-0.5">Standar dasar</span>
                                     </button>
                                 </div>
                             </div>
@@ -286,36 +286,36 @@
                                     Bagaimana kesesuaian harga sewa terhadap manfaat yang didapat?
                                 </label>
                                 <div class="grid grid-cols-3 gap-2.5">
+                                    {{-- Murah --}}
+                                    <button type="button" 
+                                        @click="harga = 'murah'"
+                                        :class="harga === 'murah' ? 'bg-gold-500/20 border-gold-500 text-gold-300 shadow-[0_0_15px_rgba(212,168,67,0.2)] ring-1 ring-gold-500/50' : 'bg-[#1b130c] border-brown-800/80 text-brown-400 hover:border-gold-500/40 hover:text-brown-200'"
+                                        class="relative flex flex-col items-center justify-center p-3 text-center rounded-xl border transition-all duration-200 cursor-pointer">
+                                        <span x-show="harga === 'murah'" class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-gold-500 text-black flex items-center justify-center text-[10px] font-bold shadow-md">✓</span>
+                                        <span class="text-base mb-1">🏷️</span>
+                                        <span class="text-xs font-semibold block">Murah</span>
+                                        <span class="text-[10px] text-brown-400 opacity-80 mt-0.5">Sangat hemat</span>
+                                    </button>
+
                                     {{-- Terjangkau --}}
                                     <button type="button" 
                                         @click="harga = 'terjangkau'"
                                         :class="harga === 'terjangkau' ? 'bg-gold-500/20 border-gold-500 text-gold-300 shadow-[0_0_15px_rgba(212,168,67,0.2)] ring-1 ring-gold-500/50' : 'bg-[#1b130c] border-brown-800/80 text-brown-400 hover:border-gold-500/40 hover:text-brown-200'"
                                         class="relative flex flex-col items-center justify-center p-3 text-center rounded-xl border transition-all duration-200 cursor-pointer">
                                         <span x-show="harga === 'terjangkau'" class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-gold-500 text-black flex items-center justify-center text-[10px] font-bold shadow-md">✓</span>
-                                        <span class="text-base mb-1">🏷️</span>
-                                        <span class="text-xs font-semibold block">Terjangkau</span>
-                                        <span class="text-[10px] text-brown-400 opacity-80 mt-0.5">Sangat sepadan</span>
-                                    </button>
-
-                                    {{-- Cukup Mahal --}}
-                                    <button type="button" 
-                                        @click="harga = 'cukup_mahal'"
-                                        :class="harga === 'cukup_mahal' ? 'bg-gold-500/20 border-gold-500 text-gold-300 shadow-[0_0_15px_rgba(212,168,67,0.2)] ring-1 ring-gold-500/50' : 'bg-[#1b130c] border-brown-800/80 text-brown-400 hover:border-gold-500/40 hover:text-brown-200'"
-                                        class="relative flex flex-col items-center justify-center p-3 text-center rounded-xl border transition-all duration-200 cursor-pointer">
-                                        <span x-show="harga === 'cukup_mahal'" class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-gold-500 text-black flex items-center justify-center text-[10px] font-bold shadow-md">✓</span>
                                         <span class="text-base mb-1">⚖️</span>
-                                        <span class="text-xs font-semibold block">Cukup Mahal</span>
-                                        <span class="text-[10px] text-brown-400 opacity-80 mt-0.5">Sesuai pasar</span>
+                                        <span class="text-xs font-semibold block">Terjangkau</span>
+                                        <span class="text-[10px] text-brown-400 opacity-80 mt-0.5">Sesuai manfaat</span>
                                     </button>
 
-                                    {{-- Sangat Mahal --}}
+                                    {{-- Mahal --}}
                                     <button type="button" 
-                                        @click="harga = 'sangat_mahal'"
-                                        :class="harga === 'sangat_mahal' ? 'bg-gold-500/20 border-gold-500 text-gold-300 shadow-[0_0_15px_rgba(212,168,67,0.2)] ring-1 ring-gold-500/50' : 'bg-[#1b130c] border-brown-800/80 text-brown-400 hover:border-gold-500/40 hover:text-brown-200'"
+                                        @click="harga = 'mahal'"
+                                        :class="harga === 'mahal' ? 'bg-gold-500/20 border-gold-500 text-gold-300 shadow-[0_0_15px_rgba(212,168,67,0.2)] ring-1 ring-gold-500/50' : 'bg-[#1b130c] border-brown-800/80 text-brown-400 hover:border-gold-500/40 hover:text-brown-200'"
                                         class="relative flex flex-col items-center justify-center p-3 text-center rounded-xl border transition-all duration-200 cursor-pointer">
-                                        <span x-show="harga === 'sangat_mahal'" class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-gold-500 text-black flex items-center justify-center text-[10px] font-bold shadow-md">✓</span>
+                                        <span x-show="harga === 'mahal'" class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-gold-500 text-black flex items-center justify-center text-[10px] font-bold shadow-md">✓</span>
                                         <span class="text-base mb-1">💸</span>
-                                        <span class="text-xs font-semibold block">Sangat Mahal</span>
+                                        <span class="text-xs font-semibold block">Mahal</span>
                                         <span class="text-[10px] text-brown-400 opacity-80 mt-0.5">Di atas budget</span>
                                     </button>
                                 </div>
@@ -328,36 +328,36 @@
                                     Bagaimana kualitas keseluruhan layanan paket selama acara?
                                 </label>
                                 <div class="grid grid-cols-3 gap-2.5">
-                                    {{-- Sangat Bagus --}}
+                                    {{-- Sangat Baik --}}
                                     <button type="button" 
-                                        @click="kualitas = 'sangat_bagus'"
-                                        :class="kualitas === 'sangat_bagus' ? 'bg-gold-500/20 border-gold-500 text-gold-300 shadow-[0_0_15px_rgba(212,168,67,0.2)] ring-1 ring-gold-500/50' : 'bg-[#1b130c] border-brown-800/80 text-brown-400 hover:border-gold-500/40 hover:text-brown-200'"
+                                        @click="kualitas = 'sangat_baik'"
+                                        :class="kualitas === 'sangat_baik' ? 'bg-gold-500/20 border-gold-500 text-gold-300 shadow-[0_0_15px_rgba(212,168,67,0.2)] ring-1 ring-gold-500/50' : 'bg-[#1b130c] border-brown-800/80 text-brown-400 hover:border-gold-500/40 hover:text-brown-200'"
                                         class="relative flex flex-col items-center justify-center p-3 text-center rounded-xl border transition-all duration-200 cursor-pointer">
-                                        <span x-show="kualitas === 'sangat_bagus'" class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-gold-500 text-black flex items-center justify-center text-[10px] font-bold shadow-md">✓</span>
+                                        <span x-show="kualitas === 'sangat_baik'" class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-gold-500 text-black flex items-center justify-center text-[10px] font-bold shadow-md">✓</span>
                                         <span class="text-base mb-1">🏆</span>
-                                        <span class="text-xs font-semibold block">Sangat Bagus</span>
+                                        <span class="text-xs font-semibold block">Sangat Baik</span>
                                         <span class="text-[10px] text-brown-400 opacity-80 mt-0.5">Sangat puas</span>
                                     </button>
 
-                                    {{-- Cukup Bagus --}}
+                                    {{-- Baik --}}
                                     <button type="button" 
-                                        @click="kualitas = 'cukup_bagus'"
-                                        :class="kualitas === 'cukup_bagus' ? 'bg-gold-500/20 border-gold-500 text-gold-300 shadow-[0_0_15px_rgba(212,168,67,0.2)] ring-1 ring-gold-500/50' : 'bg-[#1b130c] border-brown-800/80 text-brown-400 hover:border-gold-500/40 hover:text-brown-200'"
+                                        @click="kualitas = 'baik'"
+                                        :class="kualitas === 'baik' ? 'bg-gold-500/20 border-gold-500 text-gold-300 shadow-[0_0_15px_rgba(212,168,67,0.2)] ring-1 ring-gold-500/50' : 'bg-[#1b130c] border-brown-800/80 text-brown-400 hover:border-gold-500/40 hover:text-brown-200'"
                                         class="relative flex flex-col items-center justify-center p-3 text-center rounded-xl border transition-all duration-200 cursor-pointer">
-                                        <span x-show="kualitas === 'cukup_bagus'" class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-gold-500 text-black flex items-center justify-center text-[10px] font-bold shadow-md">✓</span>
+                                        <span x-show="kualitas === 'baik'" class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-gold-500 text-black flex items-center justify-center text-[10px] font-bold shadow-md">✓</span>
                                         <span class="text-base mb-1">👍</span>
-                                        <span class="text-xs font-semibold block">Cukup Bagus</span>
-                                        <span class="text-[10px] text-brown-400 opacity-80 mt-0.5">Cukup puas</span>
+                                        <span class="text-xs font-semibold block">Baik</span>
+                                        <span class="text-[10px] text-brown-400 opacity-80 mt-0.5">Sesuai harapan</span>
                                     </button>
 
-                                    {{-- Kurang Bagus --}}
+                                    {{-- Cukup Baik --}}
                                     <button type="button" 
-                                        @click="kualitas = 'kurang_bagus'"
-                                        :class="kualitas === 'kurang_bagus' ? 'bg-gold-500/20 border-gold-500 text-gold-300 shadow-[0_0_15px_rgba(212,168,67,0.2)] ring-1 ring-gold-500/50' : 'bg-[#1b130c] border-brown-800/80 text-brown-400 hover:border-gold-500/40 hover:text-brown-200'"
+                                        @click="kualitas = 'cukup_baik'"
+                                        :class="kualitas === 'cukup_baik' ? 'bg-gold-500/20 border-gold-500 text-gold-300 shadow-[0_0_15px_rgba(212,168,67,0.2)] ring-1 ring-gold-500/50' : 'bg-[#1b130c] border-brown-800/80 text-brown-400 hover:border-gold-500/40 hover:text-brown-200'"
                                         class="relative flex flex-col items-center justify-center p-3 text-center rounded-xl border transition-all duration-200 cursor-pointer">
-                                        <span x-show="kualitas === 'kurang_bagus'" class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-gold-500 text-black flex items-center justify-center text-[10px] font-bold shadow-md">✓</span>
+                                        <span x-show="kualitas === 'cukup_baik'" class="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-gold-500 text-black flex items-center justify-center text-[10px] font-bold shadow-md">✓</span>
                                         <span class="text-base mb-1">⚠️</span>
-                                        <span class="text-xs font-semibold block">Kurang Bagus</span>
+                                        <span class="text-xs font-semibold block">Cukup Baik</span>
                                         <span class="text-[10px] text-brown-400 opacity-80 mt-0.5">Perlu evaluasi</span>
                                     </button>
                                 </div>

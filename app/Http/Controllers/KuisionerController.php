@@ -18,9 +18,9 @@ class KuisionerController extends Controller
         $request->validate([
             'id_booking' => 'required|exists:bookings,id',
             'paket_id' => 'required|exists:paket_bundlings,id',
-            'fasilitas' => 'required|in:sangat_lengkap,cukup_lengkap,kurang_lengkap',
-            'harga' => 'required|in:terjangkau,cukup_mahal,sangat_mahal',
-            'kualitas' => 'required|in:sangat_bagus,cukup_bagus,kurang_bagus',
+            'fasilitas' => 'required|in:sangat_lengkap,lengkap,cukup_lengkap',
+            'harga' => 'required|in:murah,terjangkau,mahal',
+            'kualitas' => 'required|in:sangat_baik,baik,cukup_baik',
             'komentar' => 'nullable|string|max:1000',
         ]);
 
@@ -37,20 +37,24 @@ class KuisionerController extends Controller
             return redirect()->back()->with('error', 'Anda sudah memberikan penilaian untuk pesanan paket ini.');
         }
 
-        // Konversi opsi kualitatif ke angka paten AHP
-        $nilaiFasilitas = SpkService::MAPPING_NILAI['fasilitas'][$request->fasilitas];
-        $nilaiHarga = SpkService::MAPPING_NILAI['harga'][$request->harga];
-        $nilaiKualitas = SpkService::MAPPING_NILAI['kualitas'][$request->kualitas];
+        // Konversi opsi kualitatif ke nilai Ideal Mode dinamis AHP dari database
+        $mapping = SpkService::getActiveSubcriteriaMapping();
+        $nilaiFasilitas = $mapping['fasilitas'][$request->fasilitas];
+        $nilaiHarga = $mapping['harga'][$request->harga];
+        $nilaiKualitas = $mapping['kualitas'][$request->kualitas];
 
-        // Simpan respon kuisioner
+        // Simpan respon kuisioner (beserta label opsi asli agar dinamis mengikuti bobot AHP terbaru)
         KuisionerPenilaian::create([
-            'id_booking' => $booking->id,
-            'id_users' => Auth::id(),
-            'paket_id' => $request->paket_id,
+            'id_booking'      => $booking->id,
+            'id_users'        => Auth::id(),
+            'paket_id'        => $request->paket_id,
+            'opsi_fasilitas'  => $request->fasilitas,
+            'opsi_harga'      => $request->harga,
+            'opsi_kualitas'   => $request->kualitas,
             'nilai_fasilitas' => $nilaiFasilitas,
-            'nilai_harga' => $nilaiHarga,
-            'nilai_kualitas' => $nilaiKualitas,
-            'komentar' => $request->komentar,
+            'nilai_harga'     => $nilaiHarga,
+            'nilai_kualitas'  => $nilaiKualitas,
+            'komentar'        => $request->komentar,
         ]);
 
         // Hitung ulang agregat SPK secara real-time

@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             KategoriAcaraSeeder::class,
             PaketBundlingSeeder::class,
+            AhpRespondenSeeder::class,
             BookingKuisionerSpkSeeder::class,
         ]);
     }

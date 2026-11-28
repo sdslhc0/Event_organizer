@@ -1,6 +1,6 @@
 <x-backend-layout>
-    <x-slot name="title">Perhitungan AHP/SPK - Admin MELODI</x-slot>
-    <x-slot name="header">Perhitungan AHP / SPK</x-slot>
+    <x-slot name="title">Hasil &amp; Ranking - Admin MELODI</x-slot>
+    <x-slot name="header">Hasil &amp; Ranking</x-slot>
 
     <x-slot name="headerActions">
         <form action="{{ route('backend.spk.perhitungan.calculate') }}" method="POST" class="inline">
@@ -24,6 +24,15 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="p-4 rounded-xl bg-red-950/60 border border-red-700/50 text-red-300 flex items-center gap-3 shadow-lg">
+                <svg class="w-5 h-5 flex-shrink-0 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span class="text-sm font-medium">{{ session('error') }}</span>
+            </div>
+        @endif
+
         <!-- Table Section -->
         <div class="bg-dark-100 rounded-xl border border-brown-800/30 overflow-hidden flex flex-col">
             <div class="p-6 border-b border-brown-800/30 flex justify-between items-center bg-dark-100/50">
@@ -40,9 +49,9 @@
                         <tr>
                             <th class="px-6 py-4 font-medium text-center w-24">Rank</th>
                             <th class="px-6 py-4 font-medium">Nama Paket</th>
-                            <th class="px-6 py-4 font-medium text-center">N. Harga (0.50)</th>
-                            <th class="px-6 py-4 font-medium text-center">N. Kualitas (0.27)</th>
-                            <th class="px-6 py-4 font-medium text-center">N. Fasilitas (0.23)</th>
+                            <th class="px-6 py-4 font-medium text-center">N. Harga ({{ number_format($ahpWeights['harga'] ?? 0, 4) }})</th>
+                            <th class="px-6 py-4 font-medium text-center">N. Kualitas ({{ number_format($ahpWeights['kualitas'] ?? 0, 4) }})</th>
+                            <th class="px-6 py-4 font-medium text-center">N. Fasilitas ({{ number_format($ahpWeights['fasilitas'] ?? 0, 4) }})</th>
                             <th class="px-8 py-4 font-medium text-center w-48">Skor Akhir</th>
                         </tr>
                     </thead>
@@ -124,6 +133,19 @@
                     <canvas id="distributionChart"></canvas>
                 </div>
             </div>
+        </div>
+
+        <div class="bg-dark-100 rounded-xl border border-brown-800/30 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div class="text-xs text-brown-300">
+                Bobot aktif dihitung otomatis dari <strong class="text-gold-400">{{ $ahpWeights['jumlah_responden'] ?? 0 }} responden</strong>
+                (Harga: <span class="font-mono text-brown-100">{{ number_format($ahpWeights['harga'] ?? 0, 4) }}</span> &middot;
+                Kualitas: <span class="font-mono text-brown-100">{{ number_format($ahpWeights['kualitas'] ?? 0, 4) }}</span> &middot;
+                Fasilitas: <span class="font-mono text-brown-100">{{ number_format($ahpWeights['fasilitas'] ?? 0, 4) }}</span> &middot;
+                CR = <span class="font-mono text-green-400">{{ number_format($ahpWeights['cr'] ?? 0, 4) }}</span>).
+            </div>
+            <a href="{{ route('backend.spk.bobot') }}" class="btn-outline text-xs py-1.5 px-3.5 whitespace-nowrap self-start sm:self-auto">
+                Lihat Matriks &amp; 4 Tab Responden AHP &rarr;
+            </a>
         </div>
     </div>
 

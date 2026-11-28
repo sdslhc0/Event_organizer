@@ -16,9 +16,12 @@ return new class extends Migration
             $table->foreignId('id_booking')->constrained('bookings')->onDelete('cascade');
             $table->foreignId('id_users')->constrained('users')->onDelete('cascade');
             $table->foreignId('paket_id')->constrained('paket_bundlings')->onDelete('cascade');
-            $table->decimal('nilai_fasilitas', 5, 2);
-            $table->decimal('nilai_harga', 5, 2);
-            $table->decimal('nilai_kualitas', 5, 2);
+            $table->string('opsi_fasilitas')->nullable();
+            $table->string('opsi_harga')->nullable();
+            $table->string('opsi_kualitas')->nullable();
+            $table->decimal('nilai_fasilitas', 8, 4);
+            $table->decimal('nilai_harga', 8, 4);
+            $table->decimal('nilai_kualitas', 8, 4);
             $table->text('komentar')->nullable();
             $table->timestamps();
 

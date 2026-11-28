@@ -1,6 +1,6 @@
 <x-backend-layout>
-    <x-slot name="title">Penilaian Paket Jasa & Kuisioner - Admin MELODI</x-slot>
-    <x-slot name="header">Penilaian Paket Jasa & Kuisioner</x-slot>
+    <x-slot name="title">Penilaian Paket & Kuisioner - Admin MELODI</x-slot>
+    <x-slot name="header">Penilaian Paket & Kuisioner</x-slot>
 
     <x-slot name="headerActions">
         <div class="flex items-center gap-3">
@@ -26,6 +26,21 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
                 <span class="text-sm font-medium">{{ session('success') }}</span>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="p-4 rounded-xl bg-red-950/60 border border-red-700/50 text-red-300 flex items-center gap-3 shadow-lg">
+                <svg class="w-5 h-5 flex-shrink-0 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span class="text-sm font-medium">{{ session('error') }}</span>
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="p-4 rounded-xl bg-red-950/60 border border-red-700/50 text-red-300 shadow-lg text-sm">
+                {{ $errors->first() }}
             </div>
         @endif
 
@@ -76,8 +91,12 @@
                         </span>
                     </div>
                     <span class="text-[11px] text-brown-400 mt-1.5 block">
-                        Bobot: Harga (50%), Kualitas (27%), Fasilitas (23%)
+                        Bobot ({{ $ahpWeights['jumlah_responden'] ?? 0 }} Resp.): Harga ({{ number_format($ahpWeights['harga'] ?? 0, 4) }}), Kualitas ({{ number_format($ahpWeights['kualitas'] ?? 0, 4) }}), Fasilitas ({{ number_format($ahpWeights['fasilitas'] ?? 0, 4) }})
                     </span>
+                    <a href="{{ route('backend.spk.bobot') }}" class="inline-flex items-center gap-1 text-[11px] text-gold-400 hover:text-gold-300 mt-1.5 font-medium">
+                        <span>Kelola Bobot &amp; Excel AHP</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-400 flex-shrink-0">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,28 +114,28 @@
                     <p class="text-xs text-brown-400 mt-0.5">Nilai kriteria dihitung otomatis dari rata-rata kuisioner pengguna yang telah memesan paket.</p>
                 </div>
                 <a href="{{ route('backend.spk.perhitungan') }}" class="btn-outline text-xs py-1.5 px-3 flex items-center gap-1.5 self-start sm:self-auto">
-                    <span>Detail Perhitungan AHP</span>
+                    <span>Lihat Hasil &amp; Ranking</span>
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </a>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm whitespace-nowrap">
+                <table class="w-full text-left text-xs whitespace-nowrap">
                     <thead class="bg-dark-200/50 text-brown-300 font-serif border-b border-brown-800/30 text-xs">
                         <tr>
-                            <th class="px-5 py-3.5 font-medium text-center w-20">Peringkat</th>
-                            <th class="px-5 py-3.5 font-medium">Nama Paket Bundling</th>
-                            <th class="px-5 py-3.5 font-medium text-center">Harga Sewa (50%)</th>
-                            <th class="px-5 py-3.5 font-medium text-center">Kualitas (27%)</th>
-                            <th class="px-5 py-3.5 font-medium text-center">Fasilitas (23%)</th>
-                            <th class="px-5 py-3.5 font-medium text-center">Skor Akhir AHP</th>
-                            <th class="px-5 py-3.5 font-medium text-center">Persentase</th>
-                            <th class="px-5 py-3.5 font-medium text-right">Status</th>
+                            <th class="px-3 py-3.5 font-medium text-center" style="padding-left: 20px;">Rank</th>
+                            <th class="px-3 py-3.5 font-medium">Nama Paket Bundling</th>
+                            <th class="px-3 py-3.5 font-medium text-center">Harga ({{ number_format($ahpWeights['harga'] ?? 0, 4) }})</th>
+                            <th class="px-3 py-3.5 font-medium text-center">Kualitas ({{ number_format($ahpWeights['kualitas'] ?? 0, 4) }})</th>
+                            <th class="px-3 py-3.5 font-medium text-center">Fasilitas ({{ number_format($ahpWeights['fasilitas'] ?? 0, 4) }})</th>
+                            <th class="px-3 py-3.5 font-medium text-center">Skor Akhir</th>
+                            <th class="px-3 py-3.5 font-medium text-center">Persentase</th>
+                            <th class="px-3 py-3.5 font-medium text-right" style="padding-right: 20px;">Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-brown-800/30">
                         @forelse($penilaians as $p)
                             <tr class="hover:bg-dark-200/30 transition-colors {{ $p->ranking == 1 ? 'bg-gold-500/5' : '' }}">
-                                <td class="px-5 py-4 text-center">
+                                <td class="px-3 py-3.5 text-center" style="padding-left: 20px;">
                                     @if($p->ranking == 1)
                                         <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gold-500 text-black font-bold text-xs shadow-[0_0_12px_rgba(201,168,76,0.5)]">
                                             1
@@ -129,28 +148,28 @@
                                         <span class="text-brown-600">-</span>
                                     @endif
                                 </td>
-                                <td class="px-5 py-4">
+                                <td class="px-3 py-3.5">
                                     <div class="font-medium text-brown-100">{{ $p->paketBundling->nama }}</div>
-                                    <div class="text-xs text-gold-500">{{ $p->paketBundling->formatted_harga }}</div>
+                                    <div class="text-[11px] text-gold-500">{{ $p->paketBundling->formatted_harga }}</div>
                                 </td>
-                                <td class="px-5 py-4 text-center text-brown-200 font-mono text-xs">
+                                <td class="px-3 py-3.5 text-center text-brown-200 font-mono text-xs">
                                     {{ number_format($p->nilai_harga, 4) }}
                                 </td>
-                                <td class="px-5 py-4 text-center text-brown-200 font-mono text-xs">
+                                <td class="px-3 py-3.5 text-center text-brown-200 font-mono text-xs">
                                     {{ number_format($p->nilai_kualitas, 4) }}
                                 </td>
-                                <td class="px-5 py-4 text-center text-brown-200 font-mono text-xs">
+                                <td class="px-3 py-3.5 text-center text-brown-200 font-mono text-xs">
                                     {{ number_format($p->nilai_fasilitas, 4) }}
                                 </td>
-                                <td class="px-5 py-4 text-center font-bold text-gold-400 font-mono text-xs">
+                                <td class="px-3 py-3.5 text-center font-bold text-gold-400 font-mono text-xs">
                                     {{ number_format($p->skor_akhir, 4) }}
                                 </td>
-                                <td class="px-5 py-4 text-center">
+                                <td class="px-3 py-3.5 text-center">
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold {{ $p->ranking == 1 ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40' : 'bg-dark-200 text-brown-300 border border-brown-800' }}">
                                         {{ number_format($p->skor_akhir * 100, 1) }}%
                                     </span>
                                 </td>
-                                <td class="px-5 py-4 text-right">
+                                <td class="px-3 py-3.5 text-right" style="padding-right: 20px;">
                                     @if($p->ranking == 1)
                                         <span class="text-gold-400 text-xs font-semibold">★ Rekomendasi Utama</span>
                                     @else
@@ -168,6 +187,8 @@
             </div>
         </div>
 
+        @include('backend.spk._subkriteria_table')
+
         {{-- Table 2: Log Riwayat Kuisioner Masuk dari Pelanggan (Full Width) --}}
         <div class="bg-dark-100 rounded-xl border border-brown-800/30 overflow-hidden shadow-lg">
             <div class="p-5 border-b border-brown-800/30 bg-dark-100/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
@@ -180,45 +201,47 @@
                 </span>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm whitespace-nowrap">
+                <table class="w-full text-left text-xs whitespace-nowrap">
                     <thead class="bg-dark-200/50 text-brown-300 font-serif border-b border-brown-800/30 text-xs">
                         <tr>
-                            <th class="px-5 py-3.5 font-medium">Pelanggan</th>
-                            <th class="px-5 py-3.5 font-medium">Paket Bundling</th>
-                            <th class="px-5 py-3.5 font-medium text-center">Fasilitas (0.23)</th>
-                            <th class="px-5 py-3.5 font-medium text-center">Harga Sewa (0.50)</th>
-                            <th class="px-5 py-3.5 font-medium text-center">Kualitas (0.27)</th>
-                            <th class="px-5 py-3.5 font-medium">Ulasan / Masukan</th>
-                            <th class="px-5 py-3.5 font-medium text-right">Tanggal Respon</th>
+                            <th class="px-3 py-3.5 font-medium" style="padding-left: 20px;">Pelanggan</th>
+                            <th class="px-3 py-3.5 font-medium">Paket</th>
+                            <th class="px-3 py-3.5 font-medium text-center">Fasilitas ({{ number_format($ahpWeights['fasilitas'] ?? 0, 4) }})</th>
+                            <th class="px-3 py-3.5 font-medium text-center">Harga ({{ number_format($ahpWeights['harga'] ?? 0, 4) }})</th>
+                            <th class="px-3 py-3.5 font-medium text-center">Kualitas ({{ number_format($ahpWeights['kualitas'] ?? 0, 4) }})</th>
+                            <th class="px-3 py-3.5 font-medium">Ulasan / Masukan</th>
+                            <th class="px-3 py-3.5 font-medium text-right" style="padding-right: 20px;">Tanggal</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-brown-800/30 text-xs">
                         @forelse($kuisioners as $k)
                             <tr class="hover:bg-dark-200/30 transition-colors">
-                                <td class="px-5 py-3.5 font-medium text-brown-100">
+                                <td class="px-3 py-3 font-medium text-brown-100" style="padding-left: 20px;">
                                     <div>{{ $k->user->nama ?? 'Pelanggan' }}</div>
                                     <div class="text-[11px] text-brown-500">Booking #{{ $k->id_booking }} ({{ $k->booking->jenis_acara ?? 'Acara' }})</div>
                                 </td>
-                                <td class="px-5 py-3.5 font-medium text-gold-400">
+                                <td class="px-3 py-3 font-medium text-gold-400">
                                     {{ $k->paketBundling->nama ?? '-' }}
                                 </td>
-                                <td class="px-5 py-3.5 text-center text-brown-200 font-mono">
+                                <td class="px-3 py-3 text-center text-brown-200 font-mono">
                                     <span class="px-2 py-0.5 bg-dark-200/70 border border-brown-800/50 rounded">{{ $k->nilai_fasilitas }}</span>
                                 </td>
-                                <td class="px-5 py-3.5 text-center text-brown-200 font-mono">
+                                <td class="px-3 py-3 text-center text-brown-200 font-mono">
                                     <span class="px-2 py-0.5 bg-dark-200/70 border border-brown-800/50 rounded">{{ $k->nilai_harga }}</span>
                                 </td>
-                                <td class="px-5 py-3.5 text-center text-brown-200 font-mono">
+                                <td class="px-3 py-3 text-center text-brown-200 font-mono">
                                     <span class="px-2 py-0.5 bg-dark-200/70 border border-brown-800/50 rounded">{{ $k->nilai_kualitas }}</span>
                                 </td>
-                                <td class="px-5 py-3.5 text-brown-300 max-w-sm truncate" title="{{ $k->komentar }}">
-                                    @if($k->komentar)
-                                        <span class="italic text-brown-200">"{{ $k->komentar }}"</span>
-                                    @else
-                                        <span class="text-brown-600 italic">Tidak ada catatan</span>
-                                    @endif
+                                <td class="px-3 py-3 text-brown-300" title="{{ $k->komentar }}">
+                                    <div style="max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                        @if($k->komentar)
+                                            <span class="italic text-brown-200">"{{ $k->komentar }}"</span>
+                                        @else
+                                            <span class="text-brown-600 italic">Tidak ada catatan</span>
+                                        @endif
+                                    </div>
                                 </td>
-                                <td class="px-5 py-3.5 text-right text-brown-400">
+                                <td class="px-3 py-3 text-right text-brown-400" style="padding-right: 20px;">
                                     {{ $k->created_at->format('d M Y, H:i') }}
                                 </td>
                             </tr>

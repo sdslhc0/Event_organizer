@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Acara;
 use App\Models\PaketBundling;
+use App\Services\SpkService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -47,9 +48,10 @@ class PaketBundlingController extends Controller
 
         $paket = PaketBundling::create($data);
         $paket->acaras()->sync($request->layanan);
+        SpkService::recalculateFromKuisioner();
 
         return redirect()->route('backend.bundling.index')
-            ->with('success', 'Paket Bundling berhasil ditambahkan.');
+            ->with('success', 'Paket Bundling berhasil ditambahkan & ranking SPK otomatis diperbarui.');
     }
 
     public function edit(PaketBundling $bundling)
@@ -87,9 +89,10 @@ class PaketBundlingController extends Controller
 
         $bundling->update($data);
         $bundling->acaras()->sync($request->layanan);
+        SpkService::recalculateFromKuisioner();
 
         return redirect()->route('backend.bundling.index')
-            ->with('success', 'Paket Bundling berhasil diupdate.');
+            ->with('success', 'Paket Bundling berhasil diupdate & ranking SPK otomatis disinkronkan.');
     }
 
     public function destroy(PaketBundling $bundling)
@@ -99,8 +102,9 @@ class PaketBundlingController extends Controller
         }
 
         $bundling->delete();
+        SpkService::recalculateFromKuisioner();
 
         return redirect()->route('backend.bundling.index')
-            ->with('success', 'Paket Bundling berhasil dihapus.');
+            ->with('success', 'Paket Bundling berhasil dihapus & ranking SPK otomatis diperbarui.');
     }
 }

@@ -96,14 +96,17 @@
 
     <div class="title">
         Laporan Data Pemilihan Paket Bundling
+        <div style="font-size: 11px; font-weight: normal; margin-top: 4px; color: #444;">
+            Bobot Kriteria AHP ({{ $ahpWeights['jumlah_responden'] ?? 0 }} Responden): Harga ({{ number_format($ahpWeights['harga'] ?? 0, 4) }}) &middot; Kualitas ({{ number_format($ahpWeights['kualitas'] ?? 0, 4) }}) &middot; Fasilitas ({{ number_format($ahpWeights['fasilitas'] ?? 0, 4) }}) &middot; CR = {{ number_format($ahpWeights['cr'] ?? 0, 4) }}
+        </div>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th style="width: 25%;">Kode Paket Bundling</th>
-                <th style="width: 50%;">Nama Paket Bundling</th>
-                <th style="width: 25%; text-align: center;">Hasil Penilaian</th>
+                <th style="width: 22%;">Kode Paket Bundling</th>
+                <th style="width: 48%;">Nama Paket Bundling</th>
+                <th style="width: 30%; text-align: center;">Hasil Penilaian (Skor AHP)</th>
             </tr>
         </thead>
         <tbody>
@@ -111,7 +114,7 @@
                 <tr>
                     <td>PB{{ str_pad($p->paket_id, 3, '0', STR_PAD_LEFT) }}</td>
                     <td>{{ $p->paketBundling->nama }}</td>
-                    <td class="text-center">{{ number_format($p->skor_akhir, 2) }}</td>
+                    <td class="text-center">{{ number_format($p->skor_akhir, 4) }} ({{ number_format($p->skor_akhir * 100, 1) }}%)</td>
                 </tr>
             @endforeach
         </tbody>
